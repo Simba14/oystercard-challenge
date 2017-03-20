@@ -10,5 +10,14 @@ describe 'User Stories' do
     expect(card.return_balance).to eq 0
   end
 
+  # In order to keep using public transport
+  # As a customer
+  # I want to add money to my card
+  it "so customer can keep using card, allow money to be loaded to card" do
+    card.top_up(20)
+    expect(card.return_balance).to eq 20
+  end
+
+  
 
 end
