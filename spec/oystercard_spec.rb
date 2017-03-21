@@ -42,4 +42,30 @@ describe Oystercard do
     end
   end
 
+  describe "#in_journey?" do
+    it 'is initally not in a journey' do
+      expect(card.in_journey?).to be false
+    end
+
+    it 'is in journey' do
+      card.touch_in
+      expect(card.in_journey?).to be true
+    end
+  end
+
+  describe "#touch_in" do
+    it "can touch in" do
+      card.touch_in
+      expect(card).to be_in_journey
+    end
+  end
+
+  describe "#touch_out" do
+    it "can touch out" do
+      card.touch_in
+      card.touch_out
+      expect(card).not_to be_in_journey
+    end
+  end
+
 end
