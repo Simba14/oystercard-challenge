@@ -33,16 +33,16 @@ describe Oystercard do
 
   describe "#deduct" do
 
-    it { is_expected.to respond_to(:deduct).with(1).argument }
-
     it "deducts fare from balance" do
       card.top_up(30)
-      card.deduct(20)
-      expect(card.balance).to eq 10
+      card.touch_out
+      expect(card.balance).to eq 29
     end
+
   end
 
   describe "#in_journey?" do
+
     it 'is initally not in a journey' do
       expect(card.in_journey?).to be false
     end
@@ -52,9 +52,11 @@ describe Oystercard do
       card.touch_in
       expect(card.in_journey?).to be true
     end
+
   end
 
   describe "#touch_in" do
+
     it "can touch in" do
       card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in
@@ -67,11 +69,18 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
+
     it "can touch out" do
       card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in
       card.touch_out
       expect(card).not_to be_in_journey
+    end
+
+    it "deducts fare once journey is completed" do
+      card.top_up(described_class::MINIMUM_BALANCE)
+      card.touch_in
+      expect {card.touch_out}.to change{card.balance}.by(-described_class::MINIMUM_CHARGE)
     end
   end
 

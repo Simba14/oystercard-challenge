@@ -4,6 +4,7 @@ class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
+  MINIMUM_CHARGE  = 1
 
   def initialize
     @balance = 0
@@ -15,9 +16,7 @@ class Oystercard
     self.balance += amount
   end
 
-  def deduct(fare)
-    self.balance -= fare
-  end
+
 
   def in_journey?
     self.in_use
@@ -30,9 +29,14 @@ class Oystercard
 
   def touch_out
     self.in_use = false
+    deduct(MINIMUM_CHARGE)
   end
 
-private
-attr_writer :balance, :in_use
+  private
+  attr_writer :balance, :in_use
+
+  def deduct(fare)
+    self.balance -= fare
+  end
 
 end
