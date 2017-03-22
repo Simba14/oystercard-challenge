@@ -2,18 +2,18 @@
 describe 'User Stories' do
 
   let(:card) {Oystercard.new}
-
+  let(:station) {double :station}
   # In order to use public transport
   # As a customer
   # I want money on my card
-  it "so customer can use public transport, allow card to store money" do
+  it "So customer can use public transport, allow card to store money" do
     expect(card.balance).to eq 0
   end
 
   # In order to keep using public transport
   # As a customer
   # I want to add money to my card
-  it "so customer can keep using card, allow money to be loaded to card" do
+  it "So customer can keep using card, allow money to be loaded to card" do
     card.top_up(20)
     expect(card.balance).to eq 20
   end
@@ -39,7 +39,7 @@ describe 'User Stories' do
   # I need to touch in and out.
   it "In order to get through barriers, card is able to touch in and out" do
     card.top_up(1)
-    card.touch_in("Euston")
+    card.touch_in(station)
     expect(card.in_journey?).to be true
     card.touch_out
     expect(card.in_journey?).to be false
@@ -49,7 +49,7 @@ describe 'User Stories' do
   # As a customer
   # I need to have the minimum amount for a single journey
   it "In order to pay for journey, minimum amount for a single journey is needed" do
-    expect{ card.touch_in("Euston") }.to raise_error "Cannot pass. Insufficient funds!"
+    expect{ card.touch_in(station) }.to raise_error "Cannot pass. Insufficient funds!"
   end
 
   # In order to pay for my journey
@@ -57,7 +57,7 @@ describe 'User Stories' do
   # I need to pay for my journey when it's complete
   it "Pay for journey when complete" do
     card.top_up(1)
-    card.touch_in("Euston")
+    card.touch_in(station)
     expect {card.touch_out}.to change{card.balance}.by -1
   end
 
@@ -66,8 +66,8 @@ describe 'User Stories' do
   # I need to know where I've travelled from
   it "In order to pay for journey, able to know entry station" do
     card.top_up(1)
-    card.touch_in("Euston")
-    expect( card.entry_station ).to eq "Euston"
-  end  
+    card.touch_in(station)
+    expect( card.entry_station ).to eq station
+  end
 
 end
