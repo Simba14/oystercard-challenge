@@ -82,5 +82,12 @@ describe 'User Stories' do
     expect(card.journey_history).to eq [journey]
   end
 
+  # In order to know how far I have travelled
+  # As a customer
+  # I want to know what zone a station is in
+  it "In order to know how far I have travelled, I need to know what zone a station is" do
+    
+  end
+
 
 end
