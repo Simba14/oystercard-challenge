@@ -2,7 +2,9 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) {described_class.new}
-  let(:station) {double :station}
+  let(:entry_station) {double :station}
+  let(:exit_station) {double :station}
+  let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
   it "initialized with a balance of 0" do
     expect(card.balance).to eq 0
@@ -36,7 +38,7 @@ describe Oystercard do
 
     it "deducts fare from balance" do
       card.top_up(30)
-      card.touch_out
+      card.touch_out(exit_station)
       expect(card.balance).to eq 29
     end
 
@@ -50,7 +52,7 @@ describe Oystercard do
 
     it 'is in journey' do
       card.top_up(described_class::MINIMUM_BALANCE)
-      card.touch_in(station)
+      card.touch_in(entry_station)
       expect(card.in_journey?).to be true
     end
 
@@ -60,18 +62,18 @@ describe Oystercard do
 
     it "can touch in" do
       card.top_up(described_class::MINIMUM_BALANCE)
-      card.touch_in(station)
+      card.touch_in(entry_station)
       expect(card).to be_in_journey
     end
 
     it "raises an error if there are insufficient funds" do
-      expect{ card.touch_in(station) }.to raise_error "Cannot pass. Insufficient funds!"
+      expect{ card.touch_in(entry_station) }.to raise_error "Cannot pass. Insufficient funds!"
     end
 
     it "records the entry station" do
       card.top_up(1)
-      card.touch_in(station)
-      expect( card.entry_station ).to eq station
+      card.touch_in(entry_station)
+      expect( card.entry_station ).to eq entry_station
     end
 
   end
@@ -80,15 +82,36 @@ describe Oystercard do
 
     it "can touch out" do
       card.top_up(described_class::MINIMUM_BALANCE)
-      card.touch_in(station)
-      card.touch_out
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
       expect(card).not_to be_in_journey
     end
 
     it "deducts fare once journey is completed" do
       card.top_up(described_class::MINIMUM_BALANCE)
-      card.touch_in(station)
-      expect {card.touch_out}.to change{card.balance}.by(-described_class::MINIMUM_CHARGE)
+      card.touch_in(entry_station)
+      expect {card.touch_out(exit_station)}.to change{card.balance}.by(-described_class::MINIMUM_CHARGE)
+    end
+
+    it "records the exit station" do
+      card.top_up(1)
+      card.touch_out(exit_station)
+      expect(card.exit_station).to eq exit_station
+    end
+
+  end
+
+  describe '#journey_history' do
+
+    it "has an empty list of journeys by default" do
+      expect(subject.journey_history).to be_empty
+    end
+
+    it "creates a journey history when touching in and out of stations" do
+      card.top_up (1)
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
+      expect(card.journey_history).to eq [journey]
     end
   end
 

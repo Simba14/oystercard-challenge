@@ -2,7 +2,9 @@
 describe 'User Stories' do
 
   let(:card) {Oystercard.new}
-  let(:station) {double :station}
+  let(:entry_station) {double :station}
+  let(:exit_station) {double :station}
+  let(:journey) {{entry_station: entry_station, exit_station: exit_station}}
   # In order to use public transport
   # As a customer
   # I want money on my card
@@ -31,7 +33,7 @@ describe 'User Stories' do
   # I need my fare  deducted from my card
   it "In order to pay for journeys, deduct fare from card" do
     card.top_up(20)
-    expect { card.touch_out }.to change { card.balance }.by -1
+    expect { card.touch_out(entry_station) }.to change { card.balance }.by -1
   end
 
   # In order to get through the barriers.
@@ -39,9 +41,9 @@ describe 'User Stories' do
   # I need to touch in and out.
   it "In order to get through barriers, card is able to touch in and out" do
     card.top_up(1)
-    card.touch_in(station)
+    card.touch_in(entry_station)
     expect(card.in_journey?).to be true
-    card.touch_out
+    card.touch_out(exit_station)
     expect(card.in_journey?).to be false
   end
 
@@ -49,7 +51,7 @@ describe 'User Stories' do
   # As a customer
   # I need to have the minimum amount for a single journey
   it "In order to pay for journey, minimum amount for a single journey is needed" do
-    expect{ card.touch_in(station) }.to raise_error "Cannot pass. Insufficient funds!"
+    expect{ card.touch_in(entry_station) }.to raise_error "Cannot pass. Insufficient funds!"
   end
 
   # In order to pay for my journey
@@ -57,8 +59,8 @@ describe 'User Stories' do
   # I need to pay for my journey when it's complete
   it "Pay for journey when complete" do
     card.top_up(1)
-    card.touch_in(station)
-    expect {card.touch_out}.to change{card.balance}.by -1
+    card.touch_in(entry_station)
+    expect {card.touch_out(exit_station)}.to change{card.balance}.by -1
   end
 
   # In order to pay for my journey
@@ -66,8 +68,19 @@ describe 'User Stories' do
   # I need to know where I've travelled from
   it "In order to pay for journey, able to know entry station" do
     card.top_up(1)
-    card.touch_in(station)
-    expect( card.entry_station ).to eq station
+    card.touch_in(entry_station)
+    expect( card.entry_station ).to eq entry_station
   end
+
+  # In order to know where I have been
+  # As a customer
+  # I want to see to all my previous trips
+  it "I can see my journey history after completing trips" do
+    card.top_up(1)
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
+    expect(card.journey_history).to eq [journey]
+  end
+
 
 end
