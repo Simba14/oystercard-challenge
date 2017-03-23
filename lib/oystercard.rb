@@ -13,8 +13,7 @@ class Oystercard
     @balance = 0
     @entry_station = nil
     @exit_station = nil
-    @journey = Journey.new("home")
-    # @journey.finish("end")
+    @journey = Journey.new
     @journey_history = []
   end
 
@@ -29,10 +28,9 @@ class Oystercard
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
-    if !journey.complete? && in_journey?
-      deduct(Journey::PENALTY_CHARGE)
-    end
-    self.journey = Journey.new(station)
+    deduct(Journey::PENALTY_CHARGE) if in_journey? 
+    self.journey = Journey.new
+    self.journey.start(station)
   end
 
   def touch_out(station)

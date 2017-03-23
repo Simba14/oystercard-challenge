@@ -8,19 +8,23 @@ class Journey
   MINIMUM_CHARGE = 1
   PENALTY_CHARGE = 6
 
-  def initialize(station)
-    @entry_station = station
-    @travelling = true
+  def initialize
+    @travelling = false
   end
 
-  def finish(station)
-    @exit_station = station
+  def start(entry_station)
+    @entry_station = entry_station
+    self.travelling = true
+  end
+
+  def finish(exit_station)
+    @exit_station = exit_station
     self.travelling = false
   end
 
   def reset
-    @entry_station = nil
-    @exit_station = nil
+    self.entry_station = nil
+    self.exit_station = nil
   end
 
   def complete?
@@ -32,7 +36,7 @@ class Journey
   end
 
   private
-  attr_writer :travelling
+  attr_writer :travelling, :entry_station, :exit_station
 
 
 end
