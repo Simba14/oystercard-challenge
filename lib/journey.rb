@@ -32,7 +32,7 @@ class Journey
   end
 
   def fare
-    complete? ? MINIMUM_CHARGE : PENALTY_CHARGE
+    complete? ? (MINIMUM_CHARGE + (entry_station.zone - exit_station.zone).abs) : PENALTY_CHARGE
   end
 
   private

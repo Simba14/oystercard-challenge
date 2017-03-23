@@ -2,7 +2,7 @@ require_relative 'Journey'
 
 class JourneyLog
 
-  attr_reader :journey_class, :journeys, :travelling
+  attr_reader :journey_class, :travelling, :journeys
 
   def initialize(journey_class)
     @journey_class = journey_class
@@ -32,7 +32,6 @@ class JourneyLog
 
 
   private
-
 
   def current_journey
     @current_journey ||= @journey_class.new

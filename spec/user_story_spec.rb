@@ -2,8 +2,8 @@
 describe 'User Stories' do
 
   let(:card) {Oystercard.new}
-  let(:entry_station) {double :station}
-  let(:exit_station) {double :station}
+  let(:entry_station) {double :station, :zone => 3}
+  let(:exit_station) {double :station, :zone => 2}
   let(:journey_history) {{entry_station: entry_station, exit_station: exit_station}}
   let(:journey) { Journey.new}
   # In order to use public transport
@@ -62,7 +62,7 @@ describe 'User Stories' do
   it "Pay for journey when complete" do
     card.top_up(1)
     card.touch_in(entry_station)
-    expect {card.touch_out(exit_station)}.to change{card.balance}.by -1
+    expect {card.touch_out(exit_station)}.to change{card.balance}.by -2
   end
 
   # In order to pay for my journey

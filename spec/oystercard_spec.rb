@@ -2,8 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) {described_class.new}
-  let(:entry_station) {double :station}
-  let(:exit_station) {double :station}
+  let(:entry_station) {double :station, :zone => 3}
+  let(:exit_station) {double :station, :zone => 2}
   let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
   it "initialized with a balance of 0" do
@@ -18,7 +18,7 @@ describe Oystercard do
     end
 
     it "increases the returning balance by the amount loaded" do
-    expect{card.top_up(20)}.to change{ card.balance }.by 20
+      expect{card.top_up(20)}.to change{ card.balance }.by 20
     end
 
     it "raises an error if attempted top up exceeds £90 limit" do
@@ -40,7 +40,7 @@ describe Oystercard do
       card.top_up(30)
       card.touch_in(entry_station)
       card.touch_out(exit_station)
-      expect(card.balance).to eq 29
+      expect(card.balance).to eq 28
     end
 
   end
@@ -94,7 +94,7 @@ describe Oystercard do
     it "deducts fare once journey is completed" do
       card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in(entry_station)
-      expect {card.touch_out(exit_station)}.to change{card.balance}.by(- Journey::MINIMUM_CHARGE)
+      expect {card.touch_out(exit_station)}.to change{card.balance}.by(- Journey::MINIMUM_CHARGE - 1)
     end
 
   end
