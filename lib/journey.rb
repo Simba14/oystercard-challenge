@@ -4,22 +4,22 @@ require_relative "oystercard"
 
 class Journey
 
-  attr_reader :entry_station, :exit_station, :travelling
+  attr_reader :entry_station, :exit_station
   MINIMUM_CHARGE = 1
   PENALTY_CHARGE = 6
 
-  def initialize
-    @travelling = false
-  end
+  # def initialize
+  #   @travelling = false
+  # end
 
   def start(entry_station)
-    self.travelling = true
+    # self.travelling = true
     @entry_station = entry_station
   end
 
   def finish(exit_station)
     @exit_station = exit_station
-    self.travelling = false
+    # self.travelling = false
   end
 
   def reset
@@ -36,7 +36,7 @@ class Journey
   end
 
   private
-  attr_writer :travelling, :entry_station, :exit_station
+  attr_writer :entry_station, :exit_station
 
 
 end

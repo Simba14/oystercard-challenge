@@ -74,11 +74,11 @@ describe Oystercard do
       expect{ card.touch_in(entry_station) }.to raise_error "Cannot pass. Insufficient funds!"
     end
 
-    it "records the entry station" do
-      card.top_up(1)
-      card.touch_in(entry_station)
-      expect( card.journey.entry_station ).to eq entry_station
-    end
+    # it "records the entry station" do
+    #   card.top_up(1)
+    #   card.touch_in(entry_station)
+    #   expect( card.journey.entry_station ).to eq entry_station
+    # end
 
   end
 
@@ -97,20 +97,6 @@ describe Oystercard do
       expect {card.touch_out(exit_station)}.to change{card.balance}.by(- Journey::MINIMUM_CHARGE)
     end
 
-  end
-
-  describe '#journey_history' do
-
-    it "has an empty list of journeys by default" do
-      expect(subject.journey_history).to be_empty
-    end
-
-    it "creates a journey history when touching in and out of stations" do
-      card.top_up (1)
-      card.touch_in(entry_station)
-      card.touch_out(exit_station)
-      expect(card.journey_history).to eq [journey]
-    end
   end
 
 end

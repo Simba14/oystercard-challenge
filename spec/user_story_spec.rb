@@ -68,21 +68,21 @@ describe 'User Stories' do
   # In order to pay for my journey
   # As a customer
   # I need to know where I've travelled from
-  it "In order to pay for journey, able to know entry station" do
-    card.top_up(1)
-    card.touch_in(entry_station)
-    expect( card.journey.entry_station ).to eq entry_station
-  end
+  # it "In order to pay for journey, able to know entry station" do
+  #   card.top_up(1)
+  #   card.touch_in(entry_station)
+  #   expect( card.journey.entry_station ).to eq entry_station
+  # end
 
   # In order to know where I have been
   # As a customer
   # I want to see to all my previous trips
-  it "I can see my journey history after completing trips" do
-    card.top_up(1)
-    card.touch_in(entry_station)
-    card.touch_out(exit_station)
-    expect(card.journey_history).to eq [journey_history]
-  end
+  # it "I can see my journey history after completing trips" do
+  #   card.top_up(1)
+  #   card.touch_in(entry_station)
+  #   card.touch_out(exit_station)
+  #   expect(card.journey_history).to eq [journey_history]
+  # end
 
   # In order to know how far I have travelled
   # As a customer
