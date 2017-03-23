@@ -38,6 +38,7 @@ describe Oystercard do
 
     it "deducts fare from balance" do
       card.top_up(30)
+      card.touch_in(entry_station)
       card.touch_out(exit_station)
       expect(card.balance).to eq 29
     end
@@ -46,14 +47,17 @@ describe Oystercard do
 
   describe "#in_journey?" do
 
-    it 'is initally not in a journey' do
-      expect(card.in_journey?).to be false
-    end
-
     it 'is in journey' do
       card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in(entry_station)
       expect(card.in_journey?).to be true
+    end
+
+    it 'is not in journey' do
+      card.top_up(described_class::MINIMUM_BALANCE)
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
+      expect(card.in_journey?).to be false
     end
 
   end
@@ -73,7 +77,7 @@ describe Oystercard do
     it "records the entry station" do
       card.top_up(1)
       card.touch_in(entry_station)
-      expect( card.entry_station ).to eq entry_station
+      expect( card.journey.entry_station ).to eq entry_station
     end
 
   end
@@ -90,13 +94,7 @@ describe Oystercard do
     it "deducts fare once journey is completed" do
       card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in(entry_station)
-      expect {card.touch_out(exit_station)}.to change{card.balance}.by(-described_class::MINIMUM_CHARGE)
-    end
-
-    it "records the exit station" do
-      card.top_up(1)
-      card.touch_out(exit_station)
-      expect(card.exit_station).to eq exit_station
+      expect {card.touch_out(exit_station)}.to change{card.balance}.by(- Journey::MINIMUM_CHARGE)
     end
 
   end

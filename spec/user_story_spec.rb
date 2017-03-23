@@ -4,7 +4,8 @@ describe 'User Stories' do
   let(:card) {Oystercard.new}
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
-  let(:journey) {{entry_station: entry_station, exit_station: exit_station}}
+  let(:journey_history) {{entry_station: entry_station, exit_station: exit_station}}
+  let(:journey) { Journey.new}
   # In order to use public transport
   # As a customer
   # I want money on my card
@@ -33,6 +34,7 @@ describe 'User Stories' do
   # I need my fare  deducted from my card
   it "In order to pay for journeys, deduct fare from card" do
     card.top_up(20)
+    card.touch_in(entry_station)
     expect { card.touch_out(entry_station) }.to change { card.balance }.by -1
   end
 
@@ -69,7 +71,7 @@ describe 'User Stories' do
   it "In order to pay for journey, able to know entry station" do
     card.top_up(1)
     card.touch_in(entry_station)
-    expect( card.entry_station ).to eq entry_station
+    expect( card.journey.entry_station ).to eq entry_station
   end
 
   # In order to know where I have been
@@ -79,15 +81,25 @@ describe 'User Stories' do
     card.top_up(1)
     card.touch_in(entry_station)
     card.touch_out(exit_station)
-    expect(card.journey_history).to eq [journey]
+    expect(card.journey_history).to eq [journey_history]
   end
 
   # In order to know how far I have travelled
   # As a customer
   # I want to know what zone a station is in
-  it "In order to know how far I have travelled, I need to know what zone a station is" do
-    
-  end
+  # it "In order to know how far I have travelled, I need to know what zone a station is" do
+  #
+  # end
 
+  # In order to be charged correctly
+  # As a customer
+  # I need a penalty charge deducted if I fail to touch in or out
+  # it "Deducts penalty charge if failed to touch in or out" do
+  #   penalty = 5
+  #   card.top_up(20)
+  #   card.touch_in(entry_station)
+  #   card.touch_in(entry_station)
+  #   expect(card.balance).to eq 20 - penalty
+  # end
 
 end

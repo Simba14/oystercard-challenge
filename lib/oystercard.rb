@@ -1,16 +1,20 @@
+# Stores balance, enables journey to begin and end, and stores journey history
+require_relative "station"
+require_relative "journey"
+
 class Oystercard
 
-  attr_reader :balance, :entry_station, :exit_station, :in_use, :journey_history
+  attr_reader :balance, :entry_station, :exit_station, :journey_history, :journey
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
-  MINIMUM_CHARGE  = 1
 
   def initialize
     @balance = 0
     @entry_station = nil
     @exit_station = nil
-    @in_use = false
+    @journey = Journey.new("home")
+    # @journey.finish("end")
     @journey_history = []
   end
 
@@ -20,29 +24,30 @@ class Oystercard
   end
 
   def in_journey?
-    self.in_use
+    journey.travelling
   end
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
-    self.in_use = true
-    self.entry_station = station
+    if !journey.complete? && in_journey?
+      deduct(Journey::PENALTY_CHARGE)
+    end
+    self.journey = Journey.new(station)
   end
 
   def touch_out(station)
-    deduct(MINIMUM_CHARGE)
-    self.in_use = false
-    self.exit_station = station
-    self.add_to_journey_history
+    self.journey.finish(station)
+    deduct(journey.fare)
+    self.adds_to_journey_history
+    self.journey.reset
   end
 
-  def add_to_journey_history
-    self.journey_history << {entry_station: self.entry_station, exit_station: self.exit_station}
-
+  def adds_to_journey_history
+    self.journey_history << {entry_station: self.journey.entry_station, exit_station: self.journey.exit_station}
   end
 
   private
-  attr_writer :balance, :entry_station, :exit_station, :in_use
+  attr_writer :balance, :entry_station, :exit_station, :journey
 
   def deduct(fare)
     self.balance -= fare
