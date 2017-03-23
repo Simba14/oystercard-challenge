@@ -39,6 +39,10 @@ class Oystercard
      end
   end
 
+  def view_journey_history
+    journey_log.journeys
+  end
+
   private
   attr_writer :balance, :journey_log
 

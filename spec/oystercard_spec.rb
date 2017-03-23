@@ -99,4 +99,13 @@ describe Oystercard do
 
   end
 
+  describe "#view journey history" do
+    it "displays journey history" do
+      card.top_up(described_class::MINIMUM_BALANCE)
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
+      expect(card.view_journey_history).to eq [{entry_station: entry_station, exit_station: exit_station}]
+    end
+  end
+
 end
