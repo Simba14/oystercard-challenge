@@ -12,14 +12,18 @@ class JourneyLog
 
   def start(entry_station)
     current_journey.start(entry_station)
+    self.journeys << { entry_station: entry_station}
     @travelling = true
   end
 
   def finish(exit_station)
     current_journey.finish(exit_station)
-    self.journeys << { entry_station: current_journey.entry_station, exit_station: current_journey.exit_station }
-    # current_journey.reset
+    self.journeys[-1][:exit_station] = exit_station
     @travelling = false
+  end
+
+  def false_finish(exit_station)
+    self.journeys << { entry_station: nil, exit_station: exit_station}
   end
 
   def fare
