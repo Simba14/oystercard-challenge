@@ -1,6 +1,6 @@
 # Stores balance, enables journey to begin and end, and stores journey history
 require_relative "station"
-require_relative "journey"
+require_relative "journey_class"
 
 class Oystercard
 
@@ -28,7 +28,7 @@ class Oystercard
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
-    deduct(Journey::PENALTY_CHARGE) if in_journey? 
+    deduct(Journey::PENALTY_CHARGE) if in_journey?
     self.journey = Journey.new
     self.journey.start(station)
   end
