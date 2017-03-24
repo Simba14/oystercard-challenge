@@ -25,17 +25,18 @@ class Oystercard
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
-    deduct(Journey::PENALTY_CHARGE) if in_journey?
+    deduct(journey_log.fare) if in_journey?
     self.journey_log.start(station)
   end
 
   def touch_out(station)
       unless in_journey?
-        deduct(Journey::PENALTY_CHARGE)
+        deduct(journey_log.fare)
         journey_log.false_finish(station)
       else
       self.journey_log.finish(station)
       deduct(journey_log.fare)
+      journey_log.reset
      end
   end
 

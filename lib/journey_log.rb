@@ -30,6 +30,10 @@ class JourneyLog
     current_journey.fare
   end
 
+  def reset
+    current_journey.reset
+  end
+
   private
 
   attr_writer :travelling
