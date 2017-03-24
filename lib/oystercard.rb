@@ -30,7 +30,7 @@ class Oystercard
   end
 
   def touch_out(station)
-      if ! in_journey?
+      unless in_journey?
         deduct(Journey::PENALTY_CHARGE)
         journey_log.false_finish(station)
       else

@@ -14,11 +14,11 @@ class Journey
 
   def start(entry_station)
     # self.travelling = true
-    @entry_station = entry_station
+    self.entry_station = entry_station
   end
 
   def finish(exit_station)
-    @exit_station = exit_station
+    self.exit_station = exit_station
     # self.travelling = false
   end
 

@@ -13,13 +13,13 @@ class JourneyLog
   def start(entry_station)
     current_journey.start(entry_station)
     self.journeys << { entry_station: entry_station}
-    @travelling = true
+    self.travelling = true
   end
 
   def finish(exit_station)
     current_journey.finish(exit_station)
     self.journeys[-1][:exit_station] = exit_station
-    @travelling = false
+    self.travelling = false
   end
 
   def false_finish(exit_station)
@@ -30,11 +30,12 @@ class JourneyLog
     current_journey.fare
   end
 
-
   private
 
+  attr_writer :travelling
+
   def current_journey
-    @current_journey ||= @journey_class.new
+    @current_journey ||= self.journey_class.new
   end
 
 

@@ -74,12 +74,6 @@ describe Oystercard do
       expect{ card.touch_in(entry_station) }.to raise_error "Cannot pass. Insufficient funds!"
     end
 
-    # it "records the entry station" do
-    #   card.top_up(1)
-    #   card.touch_in(entry_station)
-    #   expect( card.journey.entry_station ).to eq entry_station
-    # end
-
   end
 
   describe "#touch_out" do
