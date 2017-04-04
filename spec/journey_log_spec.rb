@@ -4,7 +4,7 @@ describe JourneyLog do
 
   subject(:log) {described_class.new(journey_class)}
   let(:journey_class) { double :journey_class,  :new => journey  }
-  let(:journey) { double :journey, :start => entry_station, :finish => exit_station, :entry_station => entry_station, :exit_station => exit_station, :reset => nil }
+  let(:journey) { double :journey, :start => entry_station, :finish => exit_station, :entry_station => entry_station, :exit_station => exit_station, :reset => jour }
   let(:entry_station) { double :entry_station}
   let(:exit_station) { double :exit_station}
 

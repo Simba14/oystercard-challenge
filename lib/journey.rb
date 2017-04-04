@@ -1,4 +1,4 @@
-# Tracks ongoing journies and calculates fares
+# Tracks ongoing journies, checks if journey is complete and calculates fares
 require_relative "station"
 require_relative "oystercard"
 

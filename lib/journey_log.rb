@@ -1,5 +1,5 @@
 require_relative 'Journey'
-
+# Begins  and finished individual journies, records journey history
 class JourneyLog
 
   attr_reader :journey_class, :travelling, :journeys
